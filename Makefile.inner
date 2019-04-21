@@ -1,0 +1,34 @@
+host-tools-tmp-dir = $(host-tools-outputs-dir)/.tmp
+
+gmp:
+	$(MKDIR) $(host-tools-tmp-dir)/gmp
+	$(MKDIR) $(host-tools-outputs-dir)/gmp
+	$(TAR) $(host-tools-src-dir)/gmp/gmp-6.1.2.tar -C $(host-tools-tmp-dir)/gmp
+	$(CD) $(host-tools-tmp-dir)/gmp/gmp-6.1.2; \
+		./configure --prefix=$(host-tools-outputs-dir)/gmp/6.1.2 \
+                    --libdir=$(host-tools-outputs-dir)/gmp/6.1.2/lib; \
+		$(MAKE) all; \
+		$(MAKE) install
+
+mpfr:
+	$(MKDIR) $(host-tools-tmp-dir)/mpfr
+	$(MKDIR) $(host-tools-outputs-dir)/mpfr
+	$(TAR) $(host-tools-src-dir)/mpfr/mpfr-4.0.2.tar.gz -C $(host-tools-tmp-dir)/mpfr
+	$(CD) $(host-tools-tmp-dir)/mpfr/mpfr-4.0.2; \
+		./configure --prefix=$(host-tools-outputs-dir)/mpfr/4.0.2 \
+                    --libdir=$(host-tools-outputs-dir)/mpfr/4.0.2/lib \
+                    --with-gmp=$(host-tools-outputs-dir)/gmp/6.1.2; \
+		$(MAKE) all; \
+		$(MAKE) install
+
+mpc:
+	$(MKDIR) $(host-tools-tmp-dir)/mpc
+	$(MKDIR) $(host-tools-outputs-dir)/mpc
+	$(TAR) $(host-tools-src-dir)/mpc/mpc-1.1.0.tar.gz -C $(host-tools-tmp-dir)/mpc
+	$(CD) $(host-tools-tmp-dir)/mpc/mpc-1.1.0; \
+		./configure --prefix=$(host-tools-outputs-dir)/mpc/1.1.0 \
+                    --libdir=$(host-tools-outputs-dir)/mpc/1.1.0/lib \
+                    --with-gmp=$(host-tools-outputs-dir)/gmp/6.1.2 \
+					--with-mpfr=$(host-tools-outputs-dir)/mpfr/4.0.2; \
+		$(MAKE) all; \
+		$(MAKE) install
